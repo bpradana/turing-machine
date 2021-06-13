@@ -7,21 +7,25 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def index():
-    from TuringMachine import TM
+    from TuringMachine import TuringMachine
+    from TuringMachine import Tapes
     import json
-
+    
     PATH = 'program/'
-    CODE = PATH + request.json['mode'] + '.json'
+    TAPE_COUNT = request.json['tape_count']
+    PROGRAM = PATH + request.json['program']
     INPUT_STRING = request.json['input']
 
-    TM = TM()
-    TM.construct(CODE, 1)
-    try:
-        output = TM.run(INPUT_STRING)
-        return json.dumps(output)
-    except:
-        return 'Error', 400
+    tm = TuringMachine()
+    tapes = Tapes(TAPE_COUNT)
+    tapes.load_input(INPUT_STRING)
+
+    tm.load_tapes(tapes)
+    tm.load_program(PROGRAM)
+    log_list = tm.run(verbose=False, log=True)
+
+    return json.dumps(log_list)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, host='0.0.0.0')
