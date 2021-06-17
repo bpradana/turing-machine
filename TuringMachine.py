@@ -264,6 +264,7 @@ class TuringMachine:
             'name': meta[0],
             'initial_state': meta[1],
             'final_state': meta[2].split(','),
+            'tape_count': int(meta[3]),
             'transition': list(),
         }
 
