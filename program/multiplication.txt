@@ -1,0 +1,23 @@
+Multiplication
+q0
+q7
+1
+---
+q0 0 q1 _ >
+q0 1 q6 _ >
+q1 0 q1 0 >
+q1 1 q2 1 >
+q2 0 q3 X >
+q2 1 q5 1 <
+q3 0 q3 0 >
+q3 1 q3 1 >
+q3 _ q4 0 <
+q4 0 q4 0 <
+q4 1 q4 1 <
+q4 X q2 X >
+q5 X q5 0 <
+q5 0 q5 0 <
+q5 1 q5 1 <
+q5 _ q0 _ >
+q6 0 q6 _ >
+q6 1 q7 _ >

@@ -1,5 +1,6 @@
 from os import name
 import time
+import sys
 
 class Tapes:
     '''
@@ -330,3 +331,16 @@ class TuringMachine:
 
         print('🕖 Took %.4f seconds' % (time.time() - start))
         return log_list
+        
+if __name__ == '__main__':
+    PROGRAM = sys.argv[1]
+    INPUT_STRING = sys.argv[2]
+
+    tm = TuringMachine()
+    tm.load_program('program/' + PROGRAM)
+
+    tapes = Tapes(tm.program['tape_count'])
+    tapes.load_input(INPUT_STRING)
+    tm.load_tapes(tapes)
+
+    tm.run(verbose=True, log=False)
