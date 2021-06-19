@@ -1,4 +1,4 @@
-from os import name
+from os import name, scandir
 import time
 import sys
 
@@ -295,7 +295,9 @@ class TuringMachine:
         print('✅ %d tapes loaded' % self.tapes.tape_count)
 
     def verbose_print(self):
-        print('State:\t', self.head.current_state)
+        print('State\t: ', self.head.current_state)
+        print('Move\t: ', self.head.move)
+        print('New\t: ', self.head.output)
         for i, tape in enumerate(self.tapes.prettify()):
             print('Tape %d:\t%s' % (i+1,''.join(tape)))
         print()
@@ -311,7 +313,11 @@ class TuringMachine:
         self.head.validate_program()
         print('🔥 Running program')
 
-        log_list = list()
+        log_dict = {
+            'input': self.tapes.prettify(),
+            'step': list(),
+            'output': None
+        }
 
         finished = False
         start =  time.time()
@@ -322,16 +328,21 @@ class TuringMachine:
             finished = self.head.check()
 
             if log:
-                log = {
-                    'tapes': self.tapes.prettify(),
-                    'state': self.head.current_state,
+                log_step = {
                     'move': self.head.move,
+                    'new_symbol': self.head.output,
+                    'state': self.head.current_state,
                 }
-                log_list.append(log)
+                log_dict['step'].append(log_step)
+        
+        log_dict['step'] = log_dict['step'][:-1]
+        log_dict['output'] = self.tapes.prettify()
 
         print('🕖 Took %.4f seconds' % (time.time() - start))
-        return log_list
-        
+
+        if log:
+            return log_dict
+
 if __name__ == '__main__':
     PROGRAM = sys.argv[1]
     INPUT_STRING = sys.argv[2]

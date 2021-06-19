@@ -1,38 +1,28 @@
-from flask import Flask
-from flask import request
-
-
-app = Flask(__name__)
-
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        from TuringMachine import TuringMachine
-        from TuringMachine import Tapes
-        import json
-        
-        PATH = 'program/'
-        PROGRAM = PATH + request.json['program']
-        INPUT_STRING = request.json['input']
-
-        tm = TuringMachine()
-        tm.load_program(PROGRAM)
-
-        tapes = Tapes(tm.program['tape_count'])
-        tapes.load_input(INPUT_STRING)
-        tm.load_tapes(tapes)
-
-        log_list = tm.run(verbose=False, log=True)
-
-        return json.dumps(log_list)
-    if request.method == 'GET':
-        from os import listdir
-        import json
-
-        program_list = listdir('program')
-        return json.dumps(program_list)
-
+from TuringMachine import TuringMachine
+from TuringMachine import Tapes
+import os
+import json
 
 if __name__ == '__main__':
-    app.run(debug=False, port=5000)
+    while True:
+        print('\n-------------------------')
+        for program in os.listdir('program'): print(program)
+        print('-------------------------')
+        PROGRAM = input('Program\t: ')
+        INPUT_STRING = input('Input\t: ')
+
+        try:
+            tm = TuringMachine()
+            tm.load_program('program/' + PROGRAM)
+
+            tapes = Tapes(tm.program['tape_count'])
+            tapes.load_input(INPUT_STRING)
+            tm.load_tapes(tapes)
+
+            data = tm.run(verbose=True, log=True)
+
+            with open('public/temp.json', 'w') as outfile:
+                json.dump(data, outfile)
+
+        except Exception as e:
+            print(e)
