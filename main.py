@@ -5,13 +5,15 @@ import json
 
 if __name__ == '__main__':
     while True:
+        program_list = os.listdir('program')
         print('\n-------------------------')
-        for program in os.listdir('program'): print(program)
+        for i, program in sorted(enumerate(program_list)): print(i+1, program)
         print('-------------------------')
-        PROGRAM = input('Program\t: ')
-        INPUT_STRING = input('Input\t: ')
 
         try:
+            PROGRAM = program_list[int(input('Program\t: '))-1]
+            INPUT_STRING = input('Input\t: ')
+            
             tm = TuringMachine()
             tm.load_program('program/' + PROGRAM)
 
