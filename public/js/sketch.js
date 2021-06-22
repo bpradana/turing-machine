@@ -14,7 +14,7 @@ function preload() {
 
 function setup() {
     var mycanvas = createCanvas(xres, yres);
-    frameRate(6);
+    frameRate(1);
 
     tapeCount = arrTape.input.length;
     for (let i = 0; i < tapeCount; i++) {
